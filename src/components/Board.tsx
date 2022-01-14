@@ -4,21 +4,24 @@ import { Container} from "react-bootstrap";
 import Keyboard from './Keyboard.tsx';
 import ReactDOM from 'react-dom';
 import Word from './Word.tsx';
+import {generateWord, checkGuess} from '../utils/WordGenerator.tsx';
 
 
 
 interface IWord {
 	length: int;
 	letters: string[];
+	checks: string[];
 }
 
 function initWords(x: int) {
 	let words = {};
-	words[0] = {length: 5, letters: ["", "", "", "", ""]}
-	words[1] = {length: 5, letters: ["", "", "", "", ""]}
-	words[2] = {length: 5, letters: ["", "", "", "", ""]}
-	words[3] = {length: 5, letters: ["", "", "", "", ""]}
-	// words[4] = {length: 5, letters: ["", "", "", "", ""]}
+	words[0] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
+	words[1] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
+	words[2] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
+	words[3] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
+	words[4] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
+	words[5] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
 
 	return words;
 }
@@ -31,7 +34,10 @@ export default class Board extends React.Component {
 		this.state = {	curr: 0,
 						words: initWords(5),
 						currWord: 0,
-						currLetter: 0
+						currLetter: 0,
+						answer: generateWord(),
+						answerFound: false,
+						gameOver: false
 					}
 		console.log("constructor");
 		console.log(this);
@@ -42,25 +48,53 @@ export default class Board extends React.Component {
 	}
 
 	incrementLetterCounter() {
+		if (this.state.currLetter < 5) {
 		console.log("incrementing letter counter");
 		this.setState({currLetter: this.state.currLetter+1});
 	}
+	}
 
 	incrementWordCounter() {
-		console.log("incrementing word counter");
-		this.setState({currWord: this.state.currWord+1});
+		// increments word counter annd reset letter counter
+		if (this.state.currWord < 5) {
+			console.log("incrementing word counter");
+			this.setState({currWord: this.state.currWord+1, currLetter: 0});
+		} else {
+			this.setState({gameOver: true});
+		}
 	}
 
 	handleKeyUp = (event) => {
-		console.log("event occurred!");
-		console.log(event.key);
-		const currLetter=this.state.currLetter;
-		const currWord=this.state.currWord;
-		const newWords = {...this.state.words};
-		newWords[currWord].letters[currLetter]=event.key;
-		console.log(newWords);
-		this.setState({words: newWords});
-		this.incrementLetterCounter();
+		// console.log("event occurred!");
+		// console.log(event.key);
+		// console.log(event);
+
+		// 'ENTER' key
+		if (event.keyCode === 13) {
+			if (this.state.currLetter==5) {
+				// call checker function
+				const results = checkGuess(this.state.answer,this.state.words[this.state.currWord].letters);
+				const newWords = {...this.state.words};
+				const currWord=this.state.currWord;
+				newWords[currWord].checks=results;
+				this.setState({words: newWords});
+				this.incrementWordCounter();
+				return;
+			} else {
+				return;
+			}
+		}
+		// lowercase letter key
+		else if (event.keyCode>=65 && event.keyCode<=90) {
+			const currLetter=this.state.currLetter;
+			if (currLetter < 5) {
+				const currWord=this.state.currWord;
+				const newWords = {...this.state.words};
+				newWords[currWord].letters[currLetter]=event.key;
+				this.setState({words: newWords});
+				this.incrementLetterCounter();
+			}
+		}
 	}
 
   componentDidMount() {
@@ -80,10 +114,18 @@ export default class Board extends React.Component {
 		<Container>
 		<div className="board">
 		{
-			Object.keys(this.state.words).map((key, index) => <div className="row"><Word key={this.state.words[key].letters} length={this.state.words[key].length} bindings={this.state.words[key].letters} /></div>)
+			Object.keys(this.state.words).map((key, index) => 
+				<div className="row">
+					<Word 
+						key={this.state.words[key].letters}
+						length={this.state.words[key].length}
+						bindings={this.state.words[key].letters}
+						checks={this.state.words[index].checks}
+					/>
+				</div>)
 		}
 		</div>
-		<div>{this.state.curr}</div>
+		{ this.state.gameOver && <div>{this.state.answer}</div>}
 		<Keyboard />
 		</Container>
 		);
