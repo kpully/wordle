@@ -10,7 +10,7 @@ type GridProps = {
 
 
 const Grid = (props: GridProps) => {
-	const [rows, setRows] = React.useState([...Array(props.height)].map((x, i) => <Word length={props.width} key={i} />));
+	const [rows, setRows] = React.useState([...Array(props.height)].map((x, i) => <Word length={props.width} key={i} letter={props.bindings[i]}/>));
 
 
 

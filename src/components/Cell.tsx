@@ -4,16 +4,18 @@ import '../App.css';
 
 type CellProps = {
 	key: string;
-	character: string;
+	letter: string;
 	cellSize: int;
 }
 
 
 const Cell = (props: CellProps) => {
-	const {character, setCharacter} = React.useState(props.character);
+	const {letter, setLetter} = React.useState(props.letter);
+
+
 	return (
 		<div className="cell" style={{width: "50px", height: "50px"}}>
-		<div>{character}</div>
+		<div>{letter}</div>
 		</div>
 		);
 };

@@ -15,7 +15,7 @@
 
 .board {
     display: flex;
-
+    margin: 10px;
     justify-content: center;
 
 }
@@ -26,7 +26,19 @@
 
 .cell {
   background-color:  blue;
-  padding:  5px;
-  margin:  5px;
+  margin-left:  5px;
+  margin-bottom:  5px;
+}
 
+.keyboard {
+
+}
+
+.keyboard__key {
+  padding:  10px;
+  margin:  2px;
+}
+
+.keyboard__key--correct {
+  color: yellow;
 }
