@@ -44,8 +44,10 @@ export default class Board extends React.Component {
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.incrementLetterCounter = this.incrementLetterCounter.bind(this);
 		this.incrementWordCounter = this.incrementWordCounter.bind(this);
-		this.decrementLetterCounter = this.decrementLetterCounter.bind(this);
 		this.keyboardCallback = this.keyboardCallback.bind(this);
+		this.handleLetter = this.handleLetter.bind(this);
+		this.handleEnter = this.handleEnter.bind(this);
+		this.handleDelete = this.handleDelete.bind(this);
 
 	}
 
@@ -53,18 +55,6 @@ export default class Board extends React.Component {
 		if (this.state.currLetter < 5) {
 		console.log("incrementing letter counter");
 		this.setState({currLetter: this.state.currLetter+1});
-		}	
-	}
-
-	decrementLetterCounter() {
-		if (this.state.currLetter>0) {
-			console.log("decrementing letter counter");
-			const currLetter = this.state.currLetter-1;
-			const currWord=this.state.currWord;
-			const newWords = {...this.state.words};
-			newWords[currWord].letters[currLetter]="";
-			this.setState({words: newWords, currLetter: currLetter});
-
 		}
 	}
 
@@ -78,42 +68,67 @@ export default class Board extends React.Component {
 		}
 	}
 
-	handleKeyUp = (event) => {
-		// 'DELETE' key
-		if (event.keyCode === 8) {
-			this.decrementLetterCounter();
-		}
-
-		// 'ENTER' key
-		else if (event.keyCode === 13) {
-			if (this.state.currLetter==5) {
-				// call checker function
-				const results = checkGuess(this.state.answer,this.state.words[this.state.currWord].letters);
-				const newWords = {...this.state.words};
-				const currWord=this.state.currWord;
-				newWords[currWord].checks=results;
-				this.setState({words: newWords});
-				this.incrementWordCounter();
-				return;
-			} else {
-				return;
-			}
-		}
-		// lowercase letter key
-		else if (event.keyCode>=65 && event.keyCode<=90) {
-			const currLetter=this.state.currLetter;
-			if (currLetter < 5) {
-				const currWord=this.state.currWord;
-				const newWords = {...this.state.words};
-				newWords[currWord].letters[currLetter]=event.key;
-				this.setState({words: newWords});
-				this.incrementLetterCounter();
-			}
+	handleLetter(key: string) {
+		const currLetter=this.state.currLetter;
+		if (currLetter < 5) {
+			const currWord=this.state.currWord;
+			const newWords = {...this.state.words};
+			newWords[currWord].letters[currLetter]=key;
+			this.setState({words: newWords});
+			this.incrementLetterCounter();
 		}
 	}
 
-	keyboardCallback = (letter: string) =>{
-        this.setState({name: childData})
+	handleEnter() {
+		if (this.state.currLetter==5) {
+			// call checker function
+			const results = checkGuess(this.state.answer,this.state.words[this.state.currWord].letters);
+			const newWords = {...this.state.words};
+			const currWord=this.state.currWord;
+			newWords[currWord].checks=results;
+			this.setState({words: newWords});
+			this.incrementWordCounter();
+			return;
+		} else {
+			return;
+		}
+	}
+
+	handleDelete() {
+		if (this.state.currLetter>0) {
+			console.log("decrementing letter counter");
+			const currLetter = this.state.currLetter-1;
+			const currWord=this.state.currWord;
+			const newWords = {...this.state.words};
+			newWords[currWord].letters[currLetter]="";
+			this.setState({words: newWords, currLetter: currLetter});
+
+		}
+	}
+
+	handleKeyUp = (event) => {
+		// 'DELETE' key
+		if (event.keyCode === 8) {
+			this.handleDelete();
+		}
+		// 'ENTER' key
+		else if (event.keyCode === 13) {
+			this.handleEnter();
+		}
+		// lowercase letter key
+		else if (event.keyCode>=65 && event.keyCode<=90) {
+			this.handleLetter(event.key);
+		}
+	}
+
+	keyboardCallback = (key: string) => {
+		if (key==="ENTER") {
+			this.handleEnter();
+		} else if (key==="DEL") {
+			this.handleDelete();
+		} else {
+        	this.handleLetter(key);
+		}
     }
 
   componentDidMount() {
