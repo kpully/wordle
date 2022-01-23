@@ -14,8 +14,8 @@ const Cell = (props: CellProps) => {
 	const [check, setCheck] = React.useState(props.check || "");
 
 	const actionFunction = (newCheck) => {
-		console.log("cell actionfunction");
-		console.log("check="+newCheck);
+		// console.log("cell actionfunction");
+		// console.log("check="+newCheck);
 		setCheck(newCheck);
 	}
 	 

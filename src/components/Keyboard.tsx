@@ -1,7 +1,15 @@
 import React, {Container} from 'react';
 
-const Keyboard = () => {
+type KeyboardProps = {
+	callback: () => void,
+}
+
+const Keyboard = (props: KeyboardProps) => {
 	const [used, setUsed] = React.useState([]);
+
+	// const keyClick = (letter: string) => {
+
+	// }
 
 
 	return (

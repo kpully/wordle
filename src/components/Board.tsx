@@ -39,11 +39,13 @@ export default class Board extends React.Component {
 						answerFound: false,
 						gameOver: false
 					}
-		console.log("constructor");
+		// console.log("constructor");
 		console.log(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.incrementLetterCounter = this.incrementLetterCounter.bind(this);
 		this.incrementWordCounter = this.incrementWordCounter.bind(this);
+		this.decrementLetterCounter = this.decrementLetterCounter.bind(this);
+		this.keyboardCallback = this.keyboardCallback.bind(this);
 
 	}
 
@@ -51,7 +53,19 @@ export default class Board extends React.Component {
 		if (this.state.currLetter < 5) {
 		console.log("incrementing letter counter");
 		this.setState({currLetter: this.state.currLetter+1});
+		}	
 	}
+
+	decrementLetterCounter() {
+		if (this.state.currLetter>0) {
+			console.log("decrementing letter counter");
+			const currLetter = this.state.currLetter-1;
+			const currWord=this.state.currWord;
+			const newWords = {...this.state.words};
+			newWords[currWord].letters[currLetter]="";
+			this.setState({words: newWords, currLetter: currLetter});
+
+		}
 	}
 
 	incrementWordCounter() {
@@ -65,12 +79,13 @@ export default class Board extends React.Component {
 	}
 
 	handleKeyUp = (event) => {
-		// console.log("event occurred!");
-		// console.log(event.key);
-		// console.log(event);
+		// 'DELETE' key
+		if (event.keyCode === 8) {
+			this.decrementLetterCounter();
+		}
 
 		// 'ENTER' key
-		if (event.keyCode === 13) {
+		else if (event.keyCode === 13) {
 			if (this.state.currLetter==5) {
 				// call checker function
 				const results = checkGuess(this.state.answer,this.state.words[this.state.currWord].letters);
@@ -96,6 +111,10 @@ export default class Board extends React.Component {
 			}
 		}
 	}
+
+	keyboardCallback = (letter: string) =>{
+        this.setState({name: childData})
+    }
 
   componentDidMount() {
   	console.log("add event listener");
@@ -126,7 +145,7 @@ export default class Board extends React.Component {
 		}
 		</div>
 		{ this.state.gameOver && <div>{this.state.answer}</div>}
-		<Keyboard />
+		<Keyboard callback={this.keyboardCallback}/>
 		</Container>
 		);
 	}
