@@ -73,7 +73,7 @@ const Keyboard = (props: KeyboardProps) => {
 			<button className="keyboard__key" onClick={() => keyClick("v")}>V</button>
 			<button className="keyboard__key" onClick={() => keyClick("b")}>B</button>
 			<button className={"keyboard__key"+getKeyState("n")} onClick={() => keyClick("n")}>N</button>
-			<button className="keyboard__key" onClick={() => keyClick("m")}>M</button>
+			<button className={"keyboard__key"+getKeyState("n")} onClick={() => keyClick("m")}>M</button>
 			<button className="keyboard__key" onClick={() => keyClick("DEL")}>DEL</button>
 
 		</div>
