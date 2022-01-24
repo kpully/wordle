@@ -77,22 +77,44 @@
 
 
 .keyboard {
-
 }
 
 .keyboard__key {
   padding:  10px;
   margin:  2px;
+  border-style: solid;
+  font-size: 20px;
+
 }
 
-.keyboard__key--guessed {
-  color: darkgrey;
-}
-.keyboard__key--correct {
-  color: green;
+.keyboard__key--ABSENT {
+  background-color:  dimgrey;
+  border-style: solid;
+  padding:  10px;
+  margin:  2px;
+  font-size: 20px;
+  border-color: dimgrey;
+
 }
 
-.keyboard__key--guessed {
-  color: darkgrey;
+.keyboard__key--PRESENT {
+  background-color:  #d5d51e;
+  border-color:  #d5d51e;
+  border-style: solid;
+  padding:  10px;
+  margin:  2px;
+  font-size: 20px;
+
 }
+
+.keyboard__key--CORRECT {
+  background-color: green;
+  border-color: green;
+  border-style: solid;
+  padding:  10px;
+  margin:  2px;
+  font-size: 20px;
+
+}
+
 

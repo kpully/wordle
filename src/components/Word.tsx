@@ -6,27 +6,19 @@ import Cell from './Cell.tsx';
 
 
 type WordProps = {
-	key: int;
-	length: int;
-	cellSize: int;
+	key: number;
+	length: number;
+	cellSize: number;
 	checks: string[];
 	bindings: { [key: number]: string } ;
 }
 
-interface ICell {
-	key: int;
-	letter: string;
-}
 
 const Word = (props: WordProps) => {
 	const [checks, setChecks] = React.useState(props.checks);
 
-	const actionFunction = (newChecks) => {
-		setChecks([...newChecks]);
-	}
 	 
 useEffect(() => {    
-	// console.log("word use effect");
     setChecks(props.checks);
   },[props.checks]);
 

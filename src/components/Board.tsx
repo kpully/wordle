@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Grid from './Grid.tsx';
 import { Container} from "react-bootstrap";
 import Keyboard from './Keyboard.tsx';
 import ReactDOM from 'react-dom';
 import Word from './Word.tsx';
-import {generateWord, checkGuess} from '../utils/WordGenerator.tsx';
+import {generateWord, checkGuess} from '../utils/WordUtils.tsx';
 
 
 
-interface IWord {
-	length: int;
-	letters: string[];
-	checks: string[];
-}
-
-function initWords(x: int) {
+function initWords(x: number) {
 	let words = {};
 	words[0] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
 	words[1] = {length: 5, letters: ["", "", "", "", ""], checks: ["", "", "", "", ""]}
@@ -26,7 +19,23 @@ function initWords(x: int) {
 	return words;
 }
 
-export default class Board extends React.Component {
+type BoardProps = {
+}
+
+type BoardState = {
+	curr: number;
+	words: Array<any>;
+	currWord: number;
+	answer: string;
+	answerFound: boolean;
+	gameOver: boolean;
+	absent: Set<string>;
+	present: Set<string>;
+	correct: Set<string>;
+	currLetter: number;
+}
+
+export default class Board extends React.Component<BoardProps, BoardState> {
 	constructor(props) {
 		super(props);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
@@ -37,7 +46,10 @@ export default class Board extends React.Component {
 						currLetter: 0,
 						answer: generateWord(),
 						answerFound: false,
-						gameOver: false
+						gameOver: false,
+						absent: new Set(),
+						present: new Set(),
+						correct: new Set(),
 					}
 		// console.log("constructor");
 		console.log(this);
@@ -53,7 +65,7 @@ export default class Board extends React.Component {
 
 	incrementLetterCounter() {
 		if (this.state.currLetter < 5) {
-		console.log("incrementing letter counter");
+		// console.log("incrementing letter counter");
 		this.setState({currLetter: this.state.currLetter+1});
 		}
 	}
@@ -80,13 +92,22 @@ export default class Board extends React.Component {
 	}
 
 	handleEnter() {
+		console.log("handleEnter");
 		if (this.state.currLetter==5) {
 			// call checker function
-			const results = checkGuess(this.state.answer,this.state.words[this.state.currWord].letters);
+			const [results, newPresent, newAbsent, newCorrect] = checkGuess(this.state.answer,this.state.words[this.state.currWord].letters);
 			const newWords = {...this.state.words};
 			const currWord=this.state.currWord;
 			newWords[currWord].checks=results;
-			this.setState({words: newWords});
+			const oldAbsent = new Set([...this.state.absent]);
+			const oldCorrect = new Set([...this.state.correct]);
+			const oldPresent = new Set([...this.state.present]); 
+			this.setState({
+				words: newWords,
+				correct: new Set([...oldCorrect, ...newCorrect]),
+				present: new Set([...oldPresent, ...newPresent]),
+				absent: new Set([...oldAbsent, ...newAbsent]),
+			});
 			this.incrementWordCounter();
 			return;
 		} else {
@@ -132,12 +153,12 @@ export default class Board extends React.Component {
     }
 
   componentDidMount() {
-  	console.log("add event listener");
+  	// console.log("add event listener");
     window.addEventListener('keyup', this.handleKeyUp);
   }
 
   componentWillUnmount() {
-  	console.log("remove");
+  	// console.log("remove");
     window.removeEventListener('keyUp', this.handleKeyUp)
   }
 
@@ -160,7 +181,7 @@ export default class Board extends React.Component {
 		}
 		</div>
 		{ this.state.gameOver && <div>{this.state.answer}</div>}
-		<Keyboard callback={this.keyboardCallback}/>
+		<Keyboard callback={this.keyboardCallback} present={this.state.present} correct={this.state.correct} absent={this.state.absent}/>
 		</Container>
 		);
 	}
