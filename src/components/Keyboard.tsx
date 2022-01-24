@@ -14,17 +14,10 @@ const Keyboard = (props: KeyboardProps) => {
 
 
 	const keyClick = (letter: string) => {
-		console.log("keyClick="+letter);
 		props.callback(letter);
 	}
 
 	const getKeyState = (letter: string) => {
-		// console.log("absent=");
-		// console.log(new Array(...absent).join(' '));
-
-		// console.log("present="+present);
-		// console.log("correct="+correct);
-
 		if (absent.has(letter)) {
 			return "--ABSENT";
 		} else if (correct.has(letter)) {
@@ -37,16 +30,12 @@ const Keyboard = (props: KeyboardProps) => {
 	}
 
 	const actionFunction = (_absent: Set<string>, _present: Set<string>, _correct: Set<string>) => {
-		console.log("keyboard action functioin");
-		console.log(_absent);
 		setAbsent(_absent);
 		setPresent(_present);
 		setCorrect(_correct);
 	}
 
 	useEffect(() => {
-		console.log("keyboard use effect");
-
 		actionFunction(props.absent, props.present, props.correct);
 	}, [props.absent, props.present, props.correct])
 

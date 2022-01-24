@@ -51,8 +51,6 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 						present: new Set(),
 						correct: new Set(),
 					}
-		// console.log("constructor");
-		console.log(this);
 		this.handleKeyUp = this.handleKeyUp.bind(this);
 		this.incrementLetterCounter = this.incrementLetterCounter.bind(this);
 		this.incrementWordCounter = this.incrementWordCounter.bind(this);
@@ -65,7 +63,6 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 
 	incrementLetterCounter() {
 		if (this.state.currLetter < 5) {
-		// console.log("incrementing letter counter");
 		this.setState({currLetter: this.state.currLetter+1});
 		}
 	}
@@ -73,7 +70,6 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 	incrementWordCounter() {
 		// increments word counter annd reset letter counter
 		if (this.state.currWord < 5) {
-			console.log("incrementing word counter");
 			this.setState({currWord: this.state.currWord+1, currLetter: 0});
 		} else {
 			this.setState({gameOver: true});
@@ -92,7 +88,6 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 	}
 
 	handleEnter() {
-		console.log("handleEnter");
 		if (this.state.currLetter==5) {
 			// call checker function
 			const [results, newPresent, newAbsent, newCorrect] = checkGuess(this.state.answer,this.state.words[this.state.currWord].letters);
@@ -117,7 +112,6 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 
 	handleDelete() {
 		if (this.state.currLetter>0) {
-			console.log("decrementing letter counter");
 			const currLetter = this.state.currLetter-1;
 			const currWord=this.state.currWord;
 			const newWords = {...this.state.words};
@@ -153,12 +147,10 @@ export default class Board extends React.Component<BoardProps, BoardState> {
     }
 
   componentDidMount() {
-  	// console.log("add event listener");
     window.addEventListener('keyup', this.handleKeyUp);
   }
 
   componentWillUnmount() {
-  	// console.log("remove");
     window.removeEventListener('keyUp', this.handleKeyUp)
   }
 

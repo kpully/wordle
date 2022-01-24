@@ -12,7 +12,6 @@ enum checks {
 }
 
 export function checkGuess(answer: string, guess: string[]) {
-	console.log("checkGuess")
 	const answerList = answer.split("");
 	const answerLetters = new Set(answerList);
 	var results = [];
