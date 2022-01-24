@@ -84,7 +84,9 @@
   margin:  2px;
   border-style: solid;
   font-size: 13px;
-
+  background-color:  lightgray;
+  border-color:  lightgray;
+  border-radius: 25px;  
 }
 
 .keyboard__key--ABSENT {
@@ -94,6 +96,7 @@
   margin:  2px;
   font-size: 13px;
   border-color: dimgrey;
+  border-radius: 25px;  
 
 }
 
@@ -104,7 +107,7 @@
   padding:  10px;
   margin:  2px;
   font-size: 13px;
-
+  border-radius: 25px;  
 }
 
 .keyboard__key--CORRECT {
@@ -114,6 +117,7 @@
   padding:  10px;
   margin:  2px;
   font-size: 13px;
+  border-radius: 25px;  
 
 }
 
