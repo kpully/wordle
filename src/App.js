@@ -28,7 +28,7 @@ const classes = useStyles();
 
   return (
     <div className="App">
-      <AppBar className={classes.toolbar} position="static"> WORDLE
+      <AppBar className={classes.toolbar} position="static"> (FAKE) WORDLE
       </AppBar>
       <Board />
       <BottomNavigation
